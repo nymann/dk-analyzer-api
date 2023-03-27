@@ -19,7 +19,7 @@ class Api:
             DeathStrikeUsage(
                 client_id=self.config.warcraftlogs_client_id,
                 client_secret=self.config.warcraftlogs_client_secret,
-            )
+            ),
         ]
 
     def add_endpoints(self) -> None:
