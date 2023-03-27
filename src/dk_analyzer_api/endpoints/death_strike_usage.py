@@ -4,9 +4,11 @@ from dk_analyzer.warcraftlogs import get_access_token
 from pogo_api.endpoint import GetEndpoint
 from pydantic import BaseModel
 
+
 class DeathStrikes(BaseModel):
     hp_list: list[float]
     rp_list: list[float]
+
 
 class DeathStrikeUsage(GetEndpoint):
     def __init__(self, client_id: str, client_secret: str) -> None:
@@ -18,7 +20,7 @@ class DeathStrikeUsage(GetEndpoint):
         )
         super().__init__()
 
-    async def endpoint(self, report_id: str, fight_id: int) -> DeathStrikes:
+    async def endpoint(self, report_id: str, fight_id: int = 1) -> DeathStrikes:
         events = fetch_report(
             report_id=report_id,
             fight_id=fight_id,
