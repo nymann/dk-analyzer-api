@@ -1,5 +1,3 @@
-import statistics
-
 from dk_analyzer.models import Event
 from dk_analyzer.warcraftlogs import fetch_report
 from dk_analyzer.warcraftlogs import get_access_token
@@ -17,6 +15,26 @@ class DeathStrikes(BaseModel):
     mean_hp: float
     mean_rp: float
     data: list[DeathStrike]  # noqa: WPS110
+
+
+class Mean(BaseModel):
+    rp: float
+    hp: float
+
+    @classmethod
+    def from_events(cls, events: list[Event]) -> "Mean":
+        hp = 0
+        rp = 0
+        count = 0
+        for event in events:
+            if not event.is_cast_by_player():
+                continue
+            hp += event.hp_percent()
+            rp += event.rp()
+            count += 1
+        if count == 0:
+            return cls(rp=0, hp=0)
+        return cls(rp=rp / count, hp=hp / count)
 
 
 class DeathStrikeUsageBubbleChart(GetEndpoint):
@@ -59,14 +77,9 @@ class DeathStrikeUsageBubbleChart(GetEndpoint):
             for death_strike in hp_dict.values():
                 death_strikes.append(death_strike)
 
+        mean = Mean.from_events(events=events)
         return DeathStrikes(
-            mean_hp=self._mean_rp(events),
-            mean_rp=self._mean_rp(events),
+            mean_hp=mean.hp,
+            mean_rp=mean.rp,
             data=death_strikes,
         )
-
-    def _mean_rp(self, events: list[Event]) -> float:
-        return statistics.mean(event.rp() for event in events)
-
-    def _mean_hp(self, events: list[Event]) -> float:
-        return statistics.mean(event.hp_percent() for event in events)
