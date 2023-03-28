@@ -5,6 +5,7 @@ from pogo_api.endpoint import Endpoint
 from dk_analyzer_api.core.config import Config
 from dk_analyzer_api.core.service_container import ServiceContainer
 from dk_analyzer_api.endpoints.death_strike_usage import DeathStrikeUsage
+from dk_analyzer_api.endpoints.death_strike_usage_v2 import DeathStrikeUsageBubbleChart
 
 
 class Api:
@@ -25,6 +26,10 @@ class Api:
     def endpoints(self) -> list[Endpoint]:
         return [
             DeathStrikeUsage(
+                client_id=self.config.warcraftlogs_client_id,
+                client_secret=self.config.warcraftlogs_client_secret,
+            ),
+            DeathStrikeUsageBubbleChart(
                 client_id=self.config.warcraftlogs_client_id,
                 client_secret=self.config.warcraftlogs_client_secret,
             ),
