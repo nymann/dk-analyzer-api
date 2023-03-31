@@ -11,12 +11,10 @@ class DeathStrikeUsageBubbleChart(GetEndpoint):
 
     async def endpoint(
         self,
-        report_id: str,
-        fight_id: int = 1,
+        url: str,
         base_bubble_size: float = 2.0,
     ) -> DeathStrikes:
         return self._death_strike_service.get_events(
-            report_id=report_id,
-            fight_id=fight_id,
+            url=url,
             base_bubble_size=base_bubble_size,
         )

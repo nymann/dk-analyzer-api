@@ -1,7 +1,9 @@
+from devtools import debug
 from pydantic import BaseModel
 
 from dk_analyzer_api.domain.death_strike.model import Event
 from dk_analyzer_api.domain.warcraft_logs.death_strikes.service import WarcraftLogsDeathStrikeService
+from dk_analyzer_api.domain.warcraft_logs.report_fights.service import WarcraftLogsReportFightsService
 
 
 class DeathStrike(BaseModel):
@@ -42,11 +44,18 @@ class Mean(BaseModel):
 
 
 class DeathStrikeService:
-    def __init__(self, warcraft_logs_death_strike_service: WarcraftLogsDeathStrikeService) -> None:
+    def __init__(
+        self,
+        warcraft_logs_death_strike_service: WarcraftLogsDeathStrikeService,
+        warcraft_logs_report_fights: WarcraftLogsReportFightsService,
+    ) -> None:
         self._warcraft_logs_death_strike_service = warcraft_logs_death_strike_service
+        self._warcraft_logs_report_fights_service = warcraft_logs_report_fights
 
-    def get_events(self, report_id: str, fight_id: int, base_bubble_size: float) -> DeathStrikes:
-        events = self._warcraft_logs_death_strike_service.get_healing_events(report_id=report_id, fight_id=fight_id)
+    def get_events(self, url: str, base_bubble_size: float) -> DeathStrikes:
+        report = self._warcraft_logs_report_fights_service.get_report(url=url)
+        debug(report)
+        events = self._warcraft_logs_death_strike_service.get_healing_events(report=report)
         converted = [Event(event) for event in events]
         return self._convert_events(converted, base_bubble_size)
 
