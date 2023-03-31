@@ -1,4 +1,3 @@
-from devtools import debug
 from pydantic import BaseModel
 
 from dk_analyzer_api.domain.death_strike.model import Event
@@ -54,7 +53,6 @@ class DeathStrikeService:
 
     def get_events(self, url: str, base_bubble_size: float) -> DeathStrikes:
         report = self._warcraft_logs_report_fights_service.get_report(url=url)
-        debug(report)
         events = self._warcraft_logs_death_strike_service.get_healing_events(report=report)
         converted = [Event(event) for event in events]
         return self._convert_events(converted, base_bubble_size)
