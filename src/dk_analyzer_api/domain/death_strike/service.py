@@ -1,8 +1,7 @@
-from dk_analyzer.models import Event
-from dk_analyzer.warcraftlogs import fetch_report
-from dk_analyzer.warcraftlogs import get_access_token
-from pogo_api.endpoint import GetEndpoint
 from pydantic import BaseModel
+
+from dk_analyzer_api.domain.death_strike.model import Event
+from dk_analyzer_api.domain.warcraft_logs.death_strikes.service import WarcraftLogsDeathStrikeService
 
 
 class DeathStrike(BaseModel):
@@ -28,8 +27,8 @@ class Mean(BaseModel):
 
     @classmethod
     def from_events(cls, events: list[Event]) -> "Mean":
-        hp = 0
-        rp = 0
+        hp: float = 0
+        rp: float = 0
         count = 0
         for event in events:
             if not event.is_cast_by_player():
@@ -42,23 +41,14 @@ class Mean(BaseModel):
         return cls(rp=rp / count, hp=hp / count)
 
 
-class DeathStrikeUsageBubbleChart(GetEndpoint):
-    def __init__(self, client_id: str, client_secret: str) -> None:
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.access_token = get_access_token(
-            client_id=client_id,
-            client_secret=client_secret,
-        )
-        super().__init__()
+class DeathStrikeService:
+    def __init__(self, warcraft_logs_death_strike_service: WarcraftLogsDeathStrikeService) -> None:
+        self._warcraft_logs_death_strike_service = warcraft_logs_death_strike_service
 
-    async def endpoint(self, report_id: str, fight_id: int = 1, base_bubble_size: float = 2.0) -> DeathStrikes:
-        events = fetch_report(
-            report_id=report_id,
-            fight_id=fight_id,
-            access_token=self.access_token,
-        )
-        return self._convert_events(events=events, base_bubble_size=base_bubble_size)
+    def get_events(self, report_id: str, fight_id: int, base_bubble_size: float) -> DeathStrikes:
+        events = self._warcraft_logs_death_strike_service.get_healing_events(report_id=report_id, fight_id=fight_id)
+        converted = [Event(event) for event in events]
+        return self._convert_events(converted, base_bubble_size)
 
     def _transform_events(
         self,

@@ -1,0 +1,115 @@
+{
+  "data": {
+    "reportData": {
+      "report": {
+        "playerDetails": {
+          "data": {
+            "playerDetails": {
+              "dps": [
+                {
+                  "name": "Wölfish",
+                  "id": 207,
+                  "guid": 188322249,
+                  "type": "Druid",
+                  "server": "Kazzak",
+                  "icon": "Druid-Balance",
+                  "specs": [
+                    {
+                      "spec": "Balance",
+                      "count": 1
+                    }
+                  ],
+                  "minItemLevel": 417,
+                  "maxItemLevel": 417,
+                  "potionUse": 0,
+                  "healthstoneUse": 0,
+                  "combatantInfo": []
+                },
+                {
+                  "name": "Шакомейн",
+                  "id": 210,
+                  "guid": 256752982,
+                  "type": "Hunter",
+                  "server": "Гордунни",
+                  "icon": "Hunter-BeastMastery",
+                  "specs": [
+                    {
+                      "spec": "BeastMastery",
+                      "count": 1
+                    }
+                  ],
+                  "minItemLevel": 417,
+                  "maxItemLevel": 417,
+                  "potionUse": 0,
+                  "healthstoneUse": 0,
+                  "combatantInfo": []
+                },
+                {
+                  "name": "Teheran",
+                  "id": 208,
+                  "guid": 207428125,
+                  "type": "Rogue",
+                  "server": "Kazzak",
+                  "icon": "Rogue-Subtlety",
+                  "specs": [
+                    {
+                      "spec": "Subtlety",
+                      "count": 1
+                    }
+                  ],
+                  "minItemLevel": 417,
+                  "maxItemLevel": 417,
+                  "potionUse": 0,
+                  "healthstoneUse": 0,
+                  "combatantInfo": []
+                }
+              ],
+              "healers": [
+                {
+                  "name": "Melphorian",
+                  "id": 206,
+                  "guid": 209694892,
+                  "type": "Priest",
+                  "server": "Kazzak",
+                  "icon": "Priest-Holy",
+                  "specs": [
+                    {
+                      "spec": "Holy",
+                      "count": 1
+                    }
+                  ],
+                  "minItemLevel": 418,
+                  "maxItemLevel": 418,
+                  "potionUse": 0,
+                  "healthstoneUse": 0,
+                  "combatantInfo": []
+                }
+              ],
+              "tanks": [
+                {
+                  "name": "Overseer",
+                  "id": 4,
+                  "guid": 162749895,
+                  "type": "DeathKnight",
+                  "server": "Draenor",
+                  "icon": "DeathKnight-Blood",
+                  "specs": [
+                    {
+                      "spec": "Blood",
+                      "count": 1
+                    }
+                  ],
+                  "minItemLevel": 418,
+                  "maxItemLevel": 418,
+                  "potionUse": 0,
+                  "healthstoneUse": 0,
+                  "combatantInfo": []
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

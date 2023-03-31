@@ -1,39 +1,22 @@
-from dk_analyzer.models import Event
-from dk_analyzer.warcraftlogs import fetch_report
-from dk_analyzer.warcraftlogs import get_access_token
 from pogo_api.endpoint import GetEndpoint
-from pydantic import BaseModel
+
+from dk_analyzer_api.domain.death_strike.service import DeathStrikeService
+from dk_analyzer_api.domain.death_strike.service import DeathStrikes
 
 
-class DeathStrikes(BaseModel):
-    hp_list: list[float]
-    rp_list: list[float]
-
-
-class DeathStrikeUsage(GetEndpoint):
-    def __init__(self, client_id: str, client_secret: str) -> None:
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.access_token = get_access_token(
-            client_id=client_id,
-            client_secret=client_secret,
-        )
+class DeathStrikeUsageBubbleChart(GetEndpoint):
+    def __init__(self, death_strike_service: DeathStrikeService) -> None:
+        self._death_strike_service = death_strike_service
         super().__init__()
 
-    async def endpoint(self, report_id: str, fight_id: int = 1) -> DeathStrikes:
-        events = fetch_report(
+    async def endpoint(
+        self,
+        report_id: str,
+        fight_id: int = 1,
+        base_bubble_size: float = 2.0,
+    ) -> DeathStrikes:
+        return self._death_strike_service.get_events(
             report_id=report_id,
             fight_id=fight_id,
-            access_token=self.access_token,
+            base_bubble_size=base_bubble_size,
         )
-        return self._convert_events(events=events)
-
-    def _convert_events(self, events: list[Event]) -> DeathStrikes:
-        hp_list: list[float] = []
-        rp_list: list[float] = []
-        for event in events:
-            if not event.is_cast_by_player():
-                continue
-            hp_list.append(event.hp_percent())
-            rp_list.append(event.rp())
-        return DeathStrikes(hp_list=hp_list, rp_list=rp_list)
