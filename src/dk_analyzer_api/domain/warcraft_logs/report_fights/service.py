@@ -6,9 +6,12 @@ from dk_analyzer_api.domain.warcraft_logs.report_fights.model import Report
 class WarcraftLogsReportFightsService(WarcraftLogsApi):
     def get_report(self, url: str) -> Report:
         try:
-            return Report.from_url(url)
+            report = Report.from_url(url)
         except Exception:
             raise NotFound(f"Report or fight not found ('{url}')")
+        if report.fight_id is None:
+            return self._get_last_report(report.report_id)
+        return report
 
     def _get_last_report(self, report_id: str) -> Report:
         body = f"""
