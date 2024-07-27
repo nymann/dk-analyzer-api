@@ -20,7 +20,7 @@ class WarcraftLogsReportFightsService(WarcraftLogsApi):
         # https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH/#fight=25
         # https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH#fight=25
         s = url.split("reports/")[1]
-        b = s.split("#flight=")[0]
+        b = s.split("#fight=")[0]
         logging.info(b)
         return b.replace("/", "")
 
