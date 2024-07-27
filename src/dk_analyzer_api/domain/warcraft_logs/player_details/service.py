@@ -1,5 +1,3 @@
-from devtools import debug
-
 from dk_analyzer_api.core.exceptions import NotFound
 from dk_analyzer_api.domain.warcraft_logs.api import WarcraftLogsApi
 from dk_analyzer_api.domain.warcraft_logs.player_details.model import Model
@@ -28,5 +26,4 @@ query {{
 }}
         """
         response = self._fetch(body=body)
-        debug(response.json())
         return Model(**response.json()).data.report_data.report.player_details.data.player_details  # noqa: WPS219
