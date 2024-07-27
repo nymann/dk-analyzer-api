@@ -5,21 +5,27 @@ from dk_analyzer_api.domain.warcraft_logs.report_fights.model import Report
 
 class WarcraftLogsReportFightsService(WarcraftLogsApi):
     def get_report(self, url: str) -> Report:
-        report_id, fight_id = self._extract_report_id_and_fight_id(url=url)
+        try:
+            fight_id = self._get_fight_id(url)
+            report_id = self._get_report_id(url)
+        except Exception:
+            raise NotFound("Report or fight not found")
         if fight_id == "last":
             return self._get_last_report(report_id=report_id)
-        try:
-            fight_id_int = int(fight_id)
-        except Exception:
-            raise NotFound("Report or fight not found")
-        return Report(report_id=report_id, fight_id=fight_id_int)
+        return Report(report_id=report_id, fight_id=fight_id)
 
-    def _extract_report_id_and_fight_id(self, url: str) -> tuple[str, str | int]:
-        try:
-            report_id, fight_id = url.split("reports/")[1].split("/#fight=")
-        except Exception:
-            raise NotFound("Report or fight not found")
-        return report_id, fight_id
+    def _get_report_id(self, url: str) -> str:
+        # https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH/#fight=25
+        # https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH#fight=25
+        s = url.split("reports/")[1]
+        b = s.split("#flight=")[0]
+        return b.replace("/", "")
+
+    def _get_fight_id(self, url: str) -> int:
+        # https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH/#fight=25
+        # https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH#fight=25
+        s = url.split("#fight=")[1]
+        return int(s)
 
     def _get_last_report(self, report_id: str) -> Report:
         body = f"""
