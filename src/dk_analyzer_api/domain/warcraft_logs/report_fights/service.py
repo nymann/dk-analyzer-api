@@ -29,7 +29,7 @@ query {{
         """
         response = self._fetch(body=body)
         fights = response.json()["data"]["reportData"]["report"]["fights"]
-        for fight in fights:
+        for fight in reversed(fights):
             friendly_players = fight["friendlyPlayers"]
             if len(friendly_players) != 5:
                 continue
