@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pogo_api.endpoint import Endpoint
@@ -9,6 +11,7 @@ from dk_analyzer_api.endpoints.death_strike_usage import DeathStrikeUsageBubbleC
 
 class Api:
     def __init__(self, config: Config, service_container: ServiceContainer) -> None:
+        logging.basicConfig(level="INFO", format="%(levelname)s:\t%(asctime)s\t%(message)s")  # noqa: WPS323
         self.api = FastAPI(version=config.version, title=config.app.title, docs_url="/")
         self.config = config
         self.services = service_container

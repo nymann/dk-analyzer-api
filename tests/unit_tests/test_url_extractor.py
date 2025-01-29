@@ -3,8 +3,6 @@ from dataclasses import dataclass
 import pytest
 
 from dk_analyzer_api.domain.url_extractor import ReportFight
-from dk_analyzer_api.domain.warcraft_logs.auth.service import WarcraftLogsAuthService
-from dk_analyzer_api.domain.warcraft_logs.report_fights.service import WarcraftLogsReportFightsService
 
 
 @dataclass
@@ -29,6 +27,11 @@ test_cases: list[TestCase] = [
         url="https://www.warcraftlogs.com/reports/MyvF2p1m7Df4VLjH#fight=25",
         expected_report_id="MyvF2p1m7Df4VLjH",
         expected_fight_id="25",
+    ),
+    TestCase(
+        url="https://www.warcraftlogs.com/reports/dz143cQRWTDVFyGP?fight=last",
+        expected_report_id="dz143cQRWTDVFyGP",
+        expected_fight_id="last",
     ),
 ]
 
